@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "com.wachi.damagetweaker.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ModifyPlayerAttackBar"
+  ],
+  "injectors": {
+    "defaultRequire" : 1
+  }
+}
