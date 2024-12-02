@@ -11,7 +11,7 @@ import com.wachi.damagetweaker.config.PlayerActionResult;
 @EventBusSubscriber(modid = DamageTweakerMod.MODID, bus = EventBusSubscriber.Bus.MOD)
 public class Config
 {
-    private static final String t = "This value will be the option chosen when you type `default`";
+    private static final String t = "This value will be the option chosen when you type `default`.";
 
     private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder()
             .comment("-----------------------")
