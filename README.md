@@ -21,7 +21,7 @@ The maven info for packages can be found in:
 https://github.com/wachipayox?tab=packages&repo_name=damage-tweaker
 
 
-_I recommend only adding the mod to the compile and not the runtime (when publishing),
+I recommend only adding the mod to the compile and not the runtime (when publishing),
 for not creating conflicts with other mods that uses this one._
 
 ---
@@ -37,9 +37,32 @@ If you put an entity/damage that doesn't exist there will be no problems!
 
 #### **References:** 
 Also, you can use "any mob" for making a reference to any source entity in the game or "any damage" to make a reference to
-any damage source in the game. You can't use "any damage" at the same time of "any mob" because that is already declared in the default values that are in the "damage_tweaker-server.toml" file. That options can be overlapped using the Config class, that
-has variables like def_cooldown... but I recommend not touching them.
+any damage source in the game.
+
+The values also can use "default" instead of a number, that makes the game take the real default value.
+
+The default values for properties (which are located in the "damage_tweaker-server.toml" file) can be overlapped using the Config class, that
+has variables like def_cooldown... but I recommend not touching them. Its more reliable putting in the def_map an "any mob" and "any_damage" entry.
 
 -----
+
 For modifying the map you can do it whenever you want, it's a static declaration so you can do it at the server start or even
 your mod common setup.
+
+----------
+
+#### **Priority:**
+The game chose the value in this order(Higher prior to lower prior):
+1. Specific entity and specific damage from config file.
+2. Specific entity and specific damage from def_map.
+3. Specific entity and any damage from config file.
+4. Specific entity and any damage from def_map.
+5. Any entity and specific damage from config file.
+6. Any entity and specific damage from def_map.
+7. Any entity and any damage from config file. (this usually doesn't exist)
+8. Any entity and any damage from def_map.
+9. Default value
+
+The game uses a statement if is the last (Default value) or if isn't empty and isn't "default". Else, checks the next one.
+
+-----
