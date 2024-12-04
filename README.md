@@ -7,14 +7,14 @@ are welcomed!
 
 ### Installing the API in your mod.
 
-Add this repository to the gradle: (yes its my username and token, the token is for only package read)
+Add this repository to the gradle: (replace "account" with your github account and "token" with your token with permission to read packages)
 
 `
 maven {
 url "https://maven.pkg.github.com/wachipayox/*"
 credentials {
-            username = "wachipayox"
-            password = "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"
+            username = "account"
+            password = "token"
         }
 }
 `
