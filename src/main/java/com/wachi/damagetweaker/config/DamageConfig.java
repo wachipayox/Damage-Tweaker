@@ -99,6 +99,12 @@ public class DamageConfig {
                 && !def_map.get("any mob").get(d_n).get(dcp).getAsString().equals("default"))
             return def_map.get("any mob").get(d_n).get(dcp).getAsInt();
 
+        if(config_map.containsKey("any mob") && config_map.get("any mob").containsKey("any damage") && config_map.get("any mob").get("any damage").containsKey(dcp))
+            return config_map.get("any mob").get("any damage").get(dcp);
+
+        if(def_map.containsKey("any mob") && def_map.get("any mob").containsKey("any damage") && def_map.get("any mob").get("any damage").containsKey(dcp)
+                && !def_map.get("any mob").get("any damage").get(dcp).getAsString().equals("default"))
+            return def_map.get("any mob").get("any damage").get(dcp).getAsInt();
 
         return dcp.getDefaultValue(dSource.typeHolder());
     }
