@@ -14,7 +14,7 @@ maven {
 url "https://maven.pkg.github.com/wachipayox/*"
 credentials {
             username = "wachipayox"
-            password = "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"
+            password = "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"
         }
 }
 `
