@@ -9,13 +9,15 @@ are welcomed!
 
 Add this repository to the gradle: (yes its my username and token, the token is for only package read)
 
+`
 maven {
-url 'https://maven.pkg.github.com/wachipayox/*'
+url "https://maven.pkg.github.com/wachipayox/*"
 credentials {
-            username = 'wachipayox'
-            password = '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'
+            username = "wachipayox"
+            password = "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"
         }
 }
+`
 
 For adding the mod the package is:
 "com.wachi.damagetweaker:damage-tweaker:VERSION"
