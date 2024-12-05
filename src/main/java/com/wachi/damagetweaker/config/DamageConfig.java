@@ -23,7 +23,7 @@ import java.util.Map;
 public class DamageConfig {
 
     // Map overlaying default values for specific damages and for specific entities
-    public static Map<String, Map<String, Map<DmgP, JsonElement>>> def_map = new HashMap<>() {
+    protected static Map<String, Map<String, Map<DmgP, JsonElement>>> def_map = new HashMap<>() {
         {
             put("any mob", new HashMap<>(){{
                 put("example damage", new HashMap<>() {
@@ -61,13 +61,13 @@ public class DamageConfig {
 
     @SubscribeEvent
     public static void onServerLoad(ServerStartingEvent event) {
-        System.out.println("damage_tweaker: Loading damage config...");
+        DamageTweakerMod.LOGGER.info("Loading damage config...");
         try {
             initFile();
             loadFileOnMap();
         } catch (Exception e) {
-            System.out.println("damage_tweaker: Failed load of damage config:");
-            System.out.println(e.getMessage());
+            DamageTweakerMod.LOGGER.error("Failed load of damage config:");
+            DamageTweakerMod.LOGGER.error(e.getMessage());
         }
     }
 
@@ -76,7 +76,7 @@ public class DamageConfig {
         String d_n = dType.getRegisteredName();
 
         Entity ent = dSource.getEntity();
-        String e_n = (ent != null) ? "" + regUtil.getEntityRegistryName(ent) : "any mob";
+        String e_n = (ent != null) ? "" + regUtil.getEntityRegistryName(ent) : "no mob";
 
         if(config_map.containsKey(e_n) && config_map.get(e_n).containsKey(d_n) && config_map.get(e_n).get(d_n).containsKey(dcp))
             return config_map.get(e_n).get(d_n).get(dcp);
@@ -147,7 +147,7 @@ public class DamageConfig {
         if (file.exists())
             checkFile();
         else {
-            System.out.println("damage_tweaker: Damage Config file was not found. Generating a new one..");
+            DamageTweakerMod.LOGGER.warn("damage_tweaker: Damage Config file was not found. Generating a new one..");
             FileManager.createFile(file);
             FileManager.writeJOinFile(file, getDefaultConfigFile());
         }
@@ -170,20 +170,20 @@ public class DamageConfig {
                     for (DmgP dcp : DmgP.values())
                         if (!subsubmain.has(dcp.name)) {
                             subsubmain.add(dcp.name, jType.get(dcp.name));
-                            System.out.println("damage_tweaker: Founded an incomplete DamageType config. Adding default...");
+                            DamageTweakerMod.LOGGER.warn("damage_tweaker: Founded an incomplete DamageType config. Adding default...");
                             changed = true;
                         }
 
                 } else {
-                    System.out.println("damage_tweaker: Founded DamageType without config. Setting default...");
+                    DamageTweakerMod.LOGGER.warn("damage_tweaker: Founded DamageType without config. Setting default...");
                     submain.add(name, jType);
                     changed = true;
                 }
             }
         }
         else {
-            main.add("any mob", getAnyMobJO());
-            System.out.println("damage_tweaker: Damage Config file doesn't have values for `any mob`," +
+            main.add("any mob", getFullDefaultJO());
+            DamageTweakerMod.LOGGER.warn("damage_tweaker: Damage Config file doesn't have values for `any mob`," +
                     " which is necessary. Regenerating..");
             changed = true;
         }
@@ -192,7 +192,7 @@ public class DamageConfig {
             FileManager.writeJOinFile(getConfigFile(), main);
     }
 
-    private static JsonObject getAnyMobJO(){
+    private static JsonObject getFullDefaultJO(){
         JsonObject submain = new JsonObject();
         dmgRegistry().listElements().forEach((h) -> submain.add(h.getRegisteredName(), getDefaultConfig()));
         return submain;
@@ -207,7 +207,8 @@ public class DamageConfig {
 
     private static JsonObject getDefaultConfigFile() {
         JsonObject main = new JsonObject();
-        main.add("any mob", getAnyMobJO());
+        main.add("any mob", getFullDefaultJO());
+        main.add("no mob", getFullDefaultJO());
         main.add("minecraft:example_mob1", getExampleMobJO());
         main.add("minecraft:example_mob2", getExampleMobJO());
         return main;

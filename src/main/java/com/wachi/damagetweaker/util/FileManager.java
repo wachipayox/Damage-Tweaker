@@ -3,6 +3,7 @@ package com.wachi.damagetweaker.util;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.wachi.damagetweaker.DamageTweakerMod;
 
 import java.io.*;
 
@@ -11,6 +12,7 @@ public class FileManager {
     private static final Gson gson = new Gson();
 
 
+    @SuppressWarnings("StringConcatenationArgumentToLogCall")
     public static void createFile(File file) {
         checkAndDeleteFile(file);
 
@@ -18,12 +20,12 @@ public class FileManager {
             file.getParentFile().mkdirs();
             file.createNewFile();
 
-            System.out.println("Created new file called '" + file.getName() + "' in '" + file.getPath() + "'");
+            DamageTweakerMod.LOGGER.info("Created new file called '" + file.getName() + "' in '" + file.getPath() + "'");
         } catch (Exception e) {
 
-            System.out.println("An error has ocurred while trying to create a new file called '" + file.getName()
+            DamageTweakerMod.LOGGER.error("An error has occurred while trying to create a new file called '" + file.getName()
                     + "' in '" + file.getPath() + "'");
-            e.printStackTrace();
+            DamageTweakerMod.LOGGER.error(e.getMessage());
         }
     }
 
@@ -32,7 +34,7 @@ public class FileManager {
 
         if (file.exists()) {
             file.delete();
-            System.out.println("Deleted '" + file.getName() + "'' in '" + file.getPath() + "'");
+            DamageTweakerMod.LOGGER.info("Deleted '" + file.getName() + "'' in '" + file.getPath() + "'");
         }
     }
 
@@ -42,8 +44,8 @@ public class FileManager {
             FileWriter fileWriter = new FileWriter(file);
             fileWriter.write(mainGSONBuilderVariable.toJson(object));
             fileWriter.close();
-        } catch (IOException exception) {
-            exception.printStackTrace();
+        } catch (IOException e) {
+            DamageTweakerMod.LOGGER.error(e.getMessage());
         }
     }
 
@@ -79,7 +81,7 @@ public class FileManager {
                     JsonObject.class);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            DamageTweakerMod.LOGGER.error(e.getMessage());
         }
 
         return (read_object != null) ? read_object : new JsonObject();
@@ -90,15 +92,6 @@ public class FileManager {
         if (!JO.has(name))
             throw new Exception("Value from file is null");
         return JO.get(name);
-    }
-
-    public static JsonElement getOrCreateValueFromFile(File file, String name, Object df) throws Exception {
-        try {
-            return getValueFromFile(file, name);
-        } catch (Exception e) {
-            writeObjInFile(file, df, name);
-            return getValueFromFile(file, name);
-        }
     }
 
 }
