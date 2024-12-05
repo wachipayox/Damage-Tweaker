@@ -7,11 +7,17 @@ are welcomed!
 
 ### Installing the API in your mod.
 
-Add this repository to the gradle:
+Add this repository to the gradle: (replace "account" with your GitHub account and "token" with your token with permission to read packages)
 
+`
 maven {
-url 'https://maven.pkg.github.com/wachipayox/*'
+url "https://maven.pkg.github.com/wachipayox/*"
+credentials {
+            username = "account"
+            password = "token"
+        }
 }
+`
 
 For adding the mod the package is:
 "com.wachi.damagetweaker:damage-tweaker:VERSION"
@@ -30,14 +36,21 @@ for not creating conflicts with other mods that uses this one._
 Now that you have the mod in your gradle, the class you are interested in is in DamageConfig.
 There is a Map called def_map, that is the default values map, when the user doesn't have a specific config for a damage
 cooldown property, the game tries to get a value from this map before obtaining the general/default value (priority explained in
-the following section). Enter to the DamageConfig class and see the def_map declaration for understanding the map syntax.
-If you put an entity/damage that doesn't exist there will be no problems!
+the following section). 
+
+For modifying values in this map, there is another class called DamageTweakerAPI, which has a method for adding values to this map, just type the registry name
+of the source entity (or "any mob" o "no mob") and the registry name of the source damage (or "any damage"), and a DmgP(property) with a jsonElement that can be an Integer
+or a string typed "default"
+
+
+Enter to the DamageConfig class and see the def_map declaration for understanding the map syntax.
+It's good to know that if you put an entity/damage that doesn't exist there will be no problems!
 
 ----------
 
 #### **References:** 
 Also, you can use "any mob" for making a reference to any source entity in the game or "any damage" to make a reference to
-any damage source in the game.
+any damage source in the game. For cases where is no source entity you can use "no mob", which has more prior than "any mob"
 
 The values also can use "default" instead of a number, that makes the game take the real default value.
 
@@ -63,6 +76,7 @@ The game chose the value in this order(Higher prior to lower prior):
 8. Any entity and any damage from def_map.
 9. Default value
 
+In cases where there is no source entity the game uses Specific Entity with registry name of "no mob".
 The game uses a statement if is the last (Default value) or if isn't empty and isn't "default". Else, checks the next one.
 
 -----
